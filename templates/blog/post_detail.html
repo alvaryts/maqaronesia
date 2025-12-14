@@ -3,42 +3,59 @@
 {% block title %}{{ post.title }} | Maqaronesia{% endblock %}
 
 {% block content %}
-<article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-    <div class="text-center mb-10">
-        <div
-            class="flex justify-center items-center space-x-2 text-sm text-indigo-600 font-semibold uppercase tracking-wide">
+<article class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <div class="flex justify-center gap-2 mb-4">
             {% if post.category %}
-            <span>{{ post.category.name }}</span>
+            <div class="badge badge-primary">{{ post.category.name }}</div>
             {% endif %}
+            {% for tag in post.tags.all %}
+            <div class="badge badge-ghost">#{{ tag.name }}</div>
+            {% endfor %}
         </div>
-        <h1 class="mt-2 text-4xl leading-tight font-extrabold text-gray-900 sm:text-5xl">
+        <h1 class="text-4xl md:text-5xl font-extrabold font-heading mb-4 leading-tight">
             {{ post.title }}
         </h1>
-        <div class="mt-4 flex justify-center items-center text-gray-500 text-sm">
-            <span class="mr-2">{{ post.author.username }}</span>
-            <span class="mx-2">&middot;</span>
-            <time datetime="{{ post.published_at|date:'c' }}">{{ post.published_at|date:"F d, Y" }}</time>
+        <div class="flex items-center justify-center gap-4 text-sm text-base-content/70">
+            <span class="flex items-center gap-1"><i data-lucide="user" class="w-4 h-4"></i> {{ post.author.username
+                }}</span>
+            <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i> {{
+                post.published_at|date:"F d, Y" }}</span>
+            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> {{
+                post.read_time|default:"5 min" }} read</span>
         </div>
     </div>
 
+    <!-- Featured Image -->
     {% if post.image %}
-    <div class="mb-10 rounded-xl overflow-hidden shadow-lg">
-        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-auto object-cover">
+    <div class="mb-10 rounded-3xl overflow-hidden shadow-2xl">
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-auto object-cover max-h-[500px]">
     </div>
     {% endif %}
 
-    <div class="prose prose-lg prose-indigo mx-auto text-gray-600">
+    <!-- Content -->
+    <div
+        class="prose prose-lg md:prose-xl mx-auto prose-headings:font-heading prose-a:text-primary hover:prose-a:text-primary-focus">
         {{ post.content|linebreaks }}
     </div>
 
-    <div class="mt-10 pt-10 border-t border-gray-200">
-        <div class="flex flex-wrap gap-2">
-            {% for tag in post.tags.all %}
-            <span
-                class="inline-flex items-center px-3 py-0.5 rounded-full text-sm font-medium bg-indigo-100 text-indigo-800">
-                #{{ tag.name }}
-            </span>
-            {% endfor %}
+    <!-- Author Bio / Footer -->
+    <div class="mt-16 p-8 bg-base-200 rounded-2xl flex flex-col md:flex-row items-center md:items-start gap-6">
+        <div class="avatar placeholder">
+            <div class="bg-neutral text-neutral-content rounded-full w-20 h-20 text-3xl">
+                <span>{{ post.author.username|first|upper }}</span>
+            </div>
+        </div>
+        <div class="text-center md:text-left">
+            <h3 class="text-xl font-bold">Written by {{ post.author.username }}</h3>
+            <p class="mt-2 text-base-content/80">
+                Divulgador tecnológico y apasionado por la calidad del software.
+            </p>
+            <div class="mt-4 flex justify-center md:justify-start gap-3">
+                <button class="btn btn-circle btn-sm btn-ghost"><i data-lucide="twitter" class="w-4 h-4"></i></button>
+                <button class="btn btn-circle btn-sm btn-ghost"><i data-lucide="linkedin" class="w-4 h-4"></i></button>
+            </div>
         </div>
     </div>
 </article>

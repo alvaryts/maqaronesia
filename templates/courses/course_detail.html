@@ -3,92 +3,100 @@
 {% block title %}{{ course.title }} | Maqaronesia{% endblock %}
 
 {% block content %}
-<div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
-    <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
-        <div>
-            <h3 class="text-2xl leading-6 font-medium text-gray-900">
-                {{ course.title }}
-            </h3>
-            <p class="mt-1 max-w-2xl text-sm text-gray-500">
-                Instructor: {{ course.instructor.username }}
-            </p>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    <!-- Main Content: Header + Curriculum -->
+    <div class="lg:col-span-2 space-y-8">
+        <div class="prose max-w-none">
+            <h1 class="font-heading mb-2">{{ course.title }}</h1>
+            <p class="lead">{{ course.description }}</p>
         </div>
-        <div>
-            {% if is_enrolled %}
-            <span
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100">
-                Enrolled
-            </span>
-            {% else %}
-            <form action="{% url 'courses:enroll_course' course.slug %}" method="post">
-                {% csrf_token %}
-                <button type="submit"
-                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                    {% if course.price > 0 %}
-                    Buy for ${{ course.price }}
-                    {% else %}
-                    Enroll for Free
-                    {% endif %}
-                </button>
-            </form>
-            {% endif %}
-        </div>
-    </div>
-    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
-        <dl>
-            <div class="sm:col-span-2">
-                <dt class="text-sm font-medium text-gray-500">
-                    About this course
-                </dt>
-                <dd class="mt-1 text-sm text-gray-900">
-                    {{ course.description|linebreaks }}
-                </dd>
-            </div>
-        </dl>
-    </div>
-</div>
 
-<div class="space-y-6">
-    <h3 class="text-xl font-bold text-gray-900">Curriculum</h3>
-    {% for module in course.modules.all %}
-    <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
-        <div class="px-4 py-5 sm:px-6 bg-gray-50">
-            <h4 class="text-lg font-medium text-gray-900">
-                Module {{ module.order }}: {{ module.title }}
-            </h4>
-            {% if module.description %}
-            <p class="text-sm text-gray-500">{{ module.description }}</p>
-            {% endif %}
-        </div>
-        <div class="px-4 py-5 sm:p-6">
-            <ul class="space-y-3">
-                {% for lesson in module.lessons.all %}
-                <li class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <i data-lucide="play-circle" class="w-5 h-5 text-gray-400 mr-2"></i>
-                        {% if is_enrolled or lesson.is_free_preview %}
-                        <a href="{% url 'courses:lesson_detail' course.slug lesson.slug %}"
-                            class="text-indigo-600 hover:underline">
-                            {{ lesson.title }}
-                        </a>
-                        {% else %}
-                        <span class="text-gray-500">{{ lesson.title }}</span>
-                        {% endif %}
-                        {% if lesson.is_free_preview and not is_enrolled %}
-                        <span
-                            class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
-                            Free Preview
-                        </span>
-                        {% endif %}
-                    </div>
-                    <span class="text-sm text-gray-400">Lesson {{ lesson.order }}</span>
-                </li>
-                {% endfor %}
-            </ul>
+        <div class="divider">Curriculum</div>
+
+        <div class="join join-vertical w-full">
+            {% for module in course.modules.all %}
+            <div class="collapse collapse-arrow join-item border border-base-300">
+                <input type="radio" name="my-accordion-4" {% if forloop.first %}checked="checked" {% endif %} />
+                <div class="collapse-title text-xl font-medium flex items-center gap-3 bg-base-200">
+                    <span class="badge badge-neutral">{{ module.order }}</span>
+                    {{ module.title }}
+                </div>
+                <div class="collapse-content bg-base-100">
+                    <ul class="menu w-full p-0 pt-2">
+                        {% for lesson in module.lessons.all %}
+                        <li>
+                            <a href="{% if is_enrolled or lesson.is_free_preview %}{% url 'courses:lesson_detail' course.slug lesson.slug %}{% else %}#{% endif %}"
+                                class="flex justify-between items-center group {% if not is_enrolled and not lesson.is_free_preview %}disabled cursor-not-allowed opacity-50{% endif %}">
+                                <span class="flex items-center gap-2">
+                                    <i data-lucide="play-circle" class="w-4 h-4 group-hover:text-primary"></i>
+                                    {{ lesson.title }}
+                                </span>
+                                {% if lesson.is_free_preview %}
+                                <span class="badge badge-success badge-sm badge-outline">Preview</span>
+                                {% elif not is_enrolled %}
+                                <i data-lucide="lock" class="w-3 h-3"></i>
+                                {% endif %}
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% empty %}
+            <div class="alert alert-warning">Este curso aún no tiene contenido.</div>
+            {% endfor %}
         </div>
     </div>
-    {% empty %}
-    <div class="text-center text-gray-500 italic">No modules defined yet.</div>
-    {% endfor %}
+
+    <!-- Sidebar: Actions -->
+    <div class="lg:col-span-1">
+        <div class="card bg-base-100 shadow-xl border border-base-200 sticky top-24">
+            <figure class="p-4 pb-0">
+                {% if course.image %}
+                <img src="{{ course.image.url }}" alt="Course Cover" class="rounded-xl w-full" />
+                {% else %}
+                <div class="w-full h-48 bg-neutral rounded-xl flex items-center justify-center text-neutral-content">
+                    <i data-lucide="monitor-play" class="w-16 h-16"></i>
+                </div>
+                {% endif %}
+            </figure>
+            <div class="card-body">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-3xl font-bold font-heading">
+                        {% if course.price == 0 %}Gratis{% else %}${{ course.price }}{% endif %}
+                    </span>
+                    {% if is_enrolled %}
+                    <div class="badge badge-success p-3"><i data-lucide="check" class="w-3 h-3 mr-1"></i> Tienes acceso
+                    </div>
+                    {% endif %}
+                </div>
+
+                {% if is_enrolled %}
+                <a href="#" class="btn btn-primary btn-block">Continuar Aprendiendo</a>
+                {% else %}
+                <form action="{% url 'courses:enroll_course' course.slug %}" method="post">
+                    {% csrf_token %}
+                    <button
+                        class="btn btn-primary btn-block shadow-lg shadow-primary/30 animate-pulse hover:animate-none">
+                        Inscribirse Ahora
+                    </button>
+                </form>
+                <p class="text-xs text-center text-base-content/60 mt-2">Garantía de satisfacción de 30 días</p>
+                {% endif %}
+
+                <div class="divider"></div>
+                <ul class="space-y-3 text-sm">
+                    <li class="flex items-center gap-2"><i data-lucide="bar-chart" class="w-4 h-4 text-primary"></i>
+                        Nivel Intermedio</li>
+                    <li class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-primary"></i> 12
+                        Horas de video</li>
+                    <li class="flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4 text-primary"></i>
+                        Acceso en móvil</li>
+                    <li class="flex items-center gap-2"><i data-lucide="award" class="w-4 h-4 text-primary"></i>
+                        Certificado al finalizar</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

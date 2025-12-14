@@ -1,58 +1,89 @@
 {% extends "base.html" %}
 
-{% block title %}{{ lesson.title }} | {{ lesson.module.course.title }}{% endblock %}
+{% block title %}{{ lesson.title }} | Maqaronesia{% endblock %}
 
 {% block content %}
-<div class="flex flex-col lg:flex-row gap-8">
-    <div class="flex-1">
-        <div class="mb-6">
-            <a href="{% url 'courses:course_detail' lesson.module.course.slug %}"
-                class="text-indigo-600 hover:text-indigo-900 text-sm font-medium flex items-center">
-                <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i> Back to Course
-            </a>
-            <h1 class="mt-2 text-3xl font-extrabold text-gray-900">{{ lesson.title }}</h1>
-        </div>
+<div class="drawer lg:drawer-open">
+    <input id="course-drawer" type="checkbox" class="drawer-toggle" />
 
-        {% if lesson.video_url %}
-        <div class="aspect-w-16 aspect-h-9 mb-8 bg-black rounded-lg overflow-hidden relative"
-            style="padding-top: 56.25%;">
-            <!-- Simple video embed support logic could go here. For now assuming iframe or just a link if it's external -->
-            <iframe class="absolute top-0 left-0 w-full h-full" src="{{ lesson.video_url }}" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen></iframe>
-        </div>
-        {% endif %}
+    <!-- Lesson Content (Main) -->
+    <div class="drawer-content flex flex-col p-4 md:p-8">
+        <div class="max-w-4xl mx-auto w-full">
+            <!-- Breadcrumbs -->
+            <div class="text-sm breadcrumbs mb-6 hidden md:block">
+                <ul>
+                    <li><a href="{% url 'courses:course_list' %}">Cursos</a></li>
+                    <li><a href="{% url 'courses:course_detail' lesson.module.course.slug %}">{{
+                            lesson.module.course.title|truncatechars:20 }}</a></li>
+                    <li>{{ lesson.module.title|truncatechars:20 }}</li>
+                    <li>{{ lesson.title }}</li>
+                </ul>
+            </div>
 
-        <div class="prose prose-indigo text-gray-500">
-            {{ lesson.content|linebreaks }}
-        </div>
+            <!-- Mobile Toggle -->
+            <label for="course-drawer" class="btn btn-outline btn-sm mb-4 lg:hidden">
+                <i data-lucide="menu"></i> Ver Temario
+            </label>
 
-        <div class="mt-8 flex justify-between">
-            <!-- Navigation buttons could go here -->
-            <button
-                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
-                Mark as Complete
-            </button>
+            <h1 class="text-3xl font-bold font-heading mb-6">{{ lesson.title }}</h1>
+
+            {% if lesson.video_url %}
+            <div class="mockup-window border bg-base-300 mb-8 p-0 overflow-hidden shadow-xl">
+                <div class="aspect-video bg-black flex items-center justify-center">
+                    <iframe class="w-full h-full" src="{{ lesson.video_url }}" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen></iframe>
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="prose prose-lg max-w-none">
+                {{ lesson.content|linebreaks }}
+            </div>
+
+            <div class="flex justify-between items-center mt-12 pt-6 border-t border-base-200">
+                <button class="btn btn-neutral btn-outline gap-2">
+                    <i data-lucide="chevron-left"></i> Anterior
+                </button>
+
+                <button class="btn btn-primary gap-2">
+                    Marcar como Completa <i data-lucide="check-circle"></i>
+                </button>
+
+                <button class="btn btn-neutral btn-outline gap-2">
+                    Siguiente <i data-lucide="chevron-right"></i>
+                </button>
+            </div>
         </div>
     </div>
 
-    <div class="w-full lg:w-80 flex-shrink-0">
-        <div class="bg-gray-50 rounded-lg p-6 sticky top-6">
-            <h3 class="font-bold text-gray-900 mb-4">Course Content</h3>
-            <div class="space-y-4">
-                {% for module in lesson.module.course.modules.all %}
-                <div>
-                    <h4 class="text-sm font-medium text-gray-900 uppercase tracking-wider mb-2">Module {{ module.order
-                        }}</h4>
-                    <ul class="space-y-2">
+    <!-- Sidebar (Drawer Side) -->
+    <div class="drawer-side z-20">
+        <label htmlFor="course-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+        <div class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+            <!-- Sidebar Content -->
+            <div class="mb-6 px-2">
+                <h2 class="font-bold text-lg leading-tight">{{ lesson.module.course.title }}</h2>
+                <div class="progress w-full mt-2" value="40" max="100"></div>
+                <p class="text-xs mt-1 text-base-content/60">40% Completado</p>
+            </div>
+
+            {% for module in lesson.module.course.modules.all %}
+            <div class="collapse collapse-arrow bg-base-100 mb-2 rounded-box">
+                <input type="checkbox" {% if module==lesson.module %}checked{% endif %} />
+                <div class="collapse-title text-sm font-medium p-3 min-h-0 py-3">
+                    {{ module.title }}
+                </div>
+                <div class="collapse-content p-0">
+                    <ul class="menu menu-xs rounded-none">
                         {% for l in module.lessons.all %}
                         <li>
                             <a href="{% url 'courses:lesson_detail' lesson.module.course.slug l.slug %}"
-                                class="flex items-center text-sm {% if l.id == lesson.id %}text-indigo-600 font-bold{% else %}text-gray-600 hover:text-indigo-600{% endif %}">
-                                {% if l.id == lesson.id %}
-                                <i data-lucide="play" class="w-3 h-3 mr-2"></i>
+                                class="{% if l == lesson %}active{% endif %} py-3">
+                                {% if l == lesson %}
+                                <i data-lucide="play" class="w-3 h-3"></i>
                                 {% else %}
-                                <i data-lucide="circle" class="w-3 h-3 mr-2"></i>
+                                <i data-lucide="circle" class="w-3 h-3"></i>
                                 {% endif %}
                                 {{ l.title }}
                             </a>
@@ -60,8 +91,8 @@
                         {% endfor %}
                     </ul>
                 </div>
-                {% endfor %}
             </div>
+            {% endfor %}
         </div>
     </div>
 </div>
