@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}{{ course.title }} | Maqaronesia{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow overflow-hidden sm:rounded-lg mb-8">
+    <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+        <div>
+            <h3 class="text-2xl leading-6 font-medium text-gray-900">
+                {{ course.title }}
+            </h3>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">
+                Instructor: {{ course.instructor.username }}
+            </p>
+        </div>
+        <div>
+            {% if is_enrolled %}
+            <span
+                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100">
+                Enrolled
+            </span>
+            {% else %}
+            <form action="{% url 'courses:enroll_course' course.slug %}" method="post">
+                {% csrf_token %}
+                <button type="submit"
+                    class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    {% if course.price > 0 %}
+                    Buy for ${{ course.price }}
+                    {% else %}
+                    Enroll for Free
+                    {% endif %}
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+        <dl>
+            <div class="sm:col-span-2">
+                <dt class="text-sm font-medium text-gray-500">
+                    About this course
+                </dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    {{ course.description|linebreaks }}
+                </dd>
+            </div>
+        </dl>
+    </div>
+</div>
+
+<div class="space-y-6">
+    <h3 class="text-xl font-bold text-gray-900">Curriculum</h3>
+    {% for module in course.modules.all %}
+    <div class="bg-white overflow-hidden shadow rounded-lg divide-y divide-gray-200">
+        <div class="px-4 py-5 sm:px-6 bg-gray-50">
+            <h4 class="text-lg font-medium text-gray-900">
+                Module {{ module.order }}: {{ module.title }}
+            </h4>
+            {% if module.description %}
+            <p class="text-sm text-gray-500">{{ module.description }}</p>
+            {% endif %}
+        </div>
+        <div class="px-4 py-5 sm:p-6">
+            <ul class="space-y-3">
+                {% for lesson in module.lessons.all %}
+                <li class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i data-lucide="play-circle" class="w-5 h-5 text-gray-400 mr-2"></i>
+                        {% if is_enrolled or lesson.is_free_preview %}
+                        <a href="{% url 'courses:lesson_detail' course.slug lesson.slug %}"
+                            class="text-indigo-600 hover:underline">
+                            {{ lesson.title }}
+                        </a>
+                        {% else %}
+                        <span class="text-gray-500">{{ lesson.title }}</span>
+                        {% endif %}
+                        {% if lesson.is_free_preview and not is_enrolled %}
+                        <span
+                            class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-green-100 text-green-800">
+                            Free Preview
+                        </span>
+                        {% endif %}
+                    </div>
+                    <span class="text-sm text-gray-400">Lesson {{ lesson.order }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% empty %}
+    <div class="text-center text-gray-500 italic">No modules defined yet.</div>
+    {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,22 @@
+from django.views.generic import ListView, DetailView
+from .models import Post
+
+class PostListView(ListView):
+    model = Post
+    template_name = 'blog/post_list.html'
+    context_object_name = 'posts'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return Post.objects.filter(status='published')
+
+class PostDetailView(DetailView):
+    model = Post
+    template_name = 'blog/post_detail.html'
+    context_object_name = 'post'
+
+    def get_queryset(self):
+        # Allow viewing drafts if user is staff, otherwise only published
+        if self.request.user.is_staff:
+             return Post.objects.all()
+        return Post.objects.filter(status='published')

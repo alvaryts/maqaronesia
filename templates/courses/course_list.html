@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Courses | Maqaronesia{% endblock %}
+
+{% block content %}
+<div class="space-y-12">
+    <div class="text-center">
+        <h1 class="text-3xl font-extrabold text-gray-900 sm:text-4xl">All Courses</h1>
+        <p class="mt-3 max-w-2xl mx-auto text-xl text-gray-500 sm:mt-4">
+            Structured learning paths to master new skills.
+        </p>
+    </div>
+
+    <div class="max-w-7xl mx-auto grid gap-8 lg:grid-cols-2 lg:max-w-none">
+        {% for course in courses %}
+        <div class="flex flex-col rounded-lg shadow-lg overflow-hidden border border-gray-100">
+            <div class="flex-shrink-0">
+                {% if course.image %}
+                <img class="h-56 w-full object-cover" src="{{ course.image.url }}" alt="{{ course.title }}">
+                {% else %}
+                <div class="h-56 w-full bg-indigo-50 flex items-center justify-center text-indigo-200">
+                    <svg class="h-20 w-20" fill="currentColor" viewBox="0 0 24 24">
+                        <path
+                            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14.5v-9l6 4.5-6 4.5z" />
+                    </svg>
+                </div>
+                {% endif %}
+            </div>
+            <div class="flex-1 bg-white p-6 flex flex-col justify-between">
+                <div class="flex-1">
+                    <a href="{% url 'courses:course_detail' course.slug %}" class="block mt-2">
+                        <p class="text-xl font-semibold text-gray-900">{{ course.title }}</p>
+                        <p class="mt-3 text-base text-gray-500">{{ course.description|truncatewords:20 }}</p>
+                    </a>
+                </div>
+                <div class="mt-6 flex items-center justify-between">
+                    <span class="text-xl font-bold text-gray-900">
+                        {% if course.price > 0 %}
+                        ${{ course.price }}
+                        {% else %}
+                        Free
+                        {% endif %}
+                    </span>
+                    <a href="{% url 'courses:course_detail' course.slug %}"
+                        class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700">
+                        View Course
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-span-full text-center text-gray-500 py-12">
+            No courses available yet.
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
