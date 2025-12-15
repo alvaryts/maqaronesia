@@ -13,7 +13,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Post)
 class PostAdmin(admin.ModelAdmin):
-    list_display = ('title', 'author', 'status', 'published_at')
+    list_display = ('title', 'author', 'status', 'published_at', 'read_time')
     list_filter = ('status', 'created_at', 'published_at', 'author')
     search_fields = ('title', 'content')
     prepopulated_fields = {'slug': ('title',)}

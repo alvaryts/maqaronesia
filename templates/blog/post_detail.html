@@ -18,12 +18,19 @@
             {{ post.title }}
         </h1>
         <div class="flex items-center justify-center gap-4 text-sm text-base-content/70">
-            <span class="flex items-center gap-1"><i data-lucide="user" class="w-4 h-4"></i> {{ post.author.username
-                }}</span>
-            <span class="flex items-center gap-1"><i data-lucide="calendar" class="w-4 h-4"></i> {{
-                post.published_at|date:"F d, Y" }}</span>
-            <span class="flex items-center gap-1"><i data-lucide="clock" class="w-4 h-4"></i> {{
-                post.read_time|default:"5 min" }} read</span>
+            <!-- DEBUG MARKER: If you see this, the file updated -->
+            <span class="flex items-center gap-1">
+                <i data-lucide="user" class="w-4 h-4"></i>
+                {{ post.author.username }}
+            </span>
+            <span class="flex items-center gap-1">
+                <i data-lucide="calendar" class="w-4 h-4"></i>
+                {{ post.published_at|date:"F d, Y" }}
+            </span>
+            <span class="flex items-center gap-1">
+                <i data-lucide="clock" class="w-4 h-4"></i>
+                {{ post.read_time }} min read
+            </span>
         </div>
     </div>
 

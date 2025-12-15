@@ -25,7 +25,9 @@
                 {% else %}
                 <div class="badge badge-ghost">General</div>
                 {% endif %}
-                <span class="text-xs text-base-content/60">{{ post.published_at|date:"M d, Y" }}</span>
+                <span class="text-xs text-base-content/60">
+                    {{ post.published_at|date:"M d, Y" }} • {{ post.read_time }} min
+                </span>
             </div>
             <h2 class="card-title font-heading">
                 <a href="{% url 'blog:post_detail' post.slug %}" class="hover:text-primary transition-colors">

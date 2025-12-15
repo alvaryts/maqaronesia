@@ -37,6 +37,7 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.ImageField(upload_to='blog/', null=True, blank=True)
+    read_time = models.PositiveIntegerField(default=5, help_text="Estimated read time in minutes")
 
     class Meta:
         ordering = ['-published_at']
