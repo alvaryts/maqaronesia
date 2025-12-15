@@ -29,6 +29,13 @@ ENV/
 # Database
 *.sqlite3
 *.db
+db.sqlite3
+db.sqlite3-journal
+
+# Media & Static
+/media
+/staticfiles
+/static_cdn
 
 # Mac
 .DS_Store
@@ -36,10 +43,14 @@ ENV/
 # IDE
 .vscode/
 .idea/
+*.swp
+*.swo
 
 # Environment variables
 .env
+*.env
 .env.local
+.env.example
 
 # Secrets
 .secrets/
