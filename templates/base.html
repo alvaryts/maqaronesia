@@ -81,18 +81,11 @@
         <div class="navbar-end gap-2">
             {% if user.is_authenticated %}
             <div class="dropdown dropdown-end">
-                <div tabindex="0" role="button"
-                    class="btn btn-ghost btn-circle avatar border-2 border-primary/20 hover:border-primary transition-colors">
-                    <div class="w-10 rounded-full bg-primary/10 text-primary">
-                        {% if user.socialaccount_set.all.0.get_avatar_url %}
-                        <img src="{{ user.socialaccount_set.all.0.get_avatar_url }}" referrerpolicy="no-referrer" />
-                        {% else %}
-                        <span class="text-xs font-bold">{{ user.username|make_list|first|upper }}</span>
-                        {% endif %}
-                    </div>
+                <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar">
+                    <div class="w-10 h-10 rounded-full" style="background:#fff;border:2px solid #f97316;display:flex;align-items:center;justify-content:center;"><span style="color:#0f172a;font-size:1.25rem;font-weight:900;">{{ user.username.0|upper }}</span></div>
                 </div>
                 <ul tabindex="0"
-                    class="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow-2xl bg-base-100 rounded-2xl w-64 border border-base-200 animate-slide-up">
+                    class="menu menu-sm dropdown-content mt-3 z-[1] p-4 shadow-2xl bg-base-100 rounded-2xl w-64 border border-base-200">
                     <li class="menu-title flex items-center gap-2 mb-2 pb-2 border-b border-base-100">
                         <span class="text-xs uppercase tracking-widest opacity-50">Sesión activa</span>
                         <div class="font-bold text-base-content/90">{{ user.username }}</div>
@@ -112,10 +105,7 @@
                 </ul>
             </div>
             {% else %}
-            <a href="{% url 'account_login' %}"
-                class="btn btn-primary btn-sm rounded-lg px-6 hover-glow transition-all">
-                Entrar
-            </a>
+            <a href="{% url 'account_login' %}" class="btn btn-primary btn-sm rounded-lg px-6">Entrar</a>
             {% endif %}
         </div>
     </header>
