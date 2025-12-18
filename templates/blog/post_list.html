@@ -3,58 +3,56 @@
 {% block title %}Blog | Maqaronesia{% endblock %}
 
 {% block content %}
-<div class="text-center py-10">
-    <h1 class="text-4xl font-bold font-heading mb-4">Latest Articles</h1>
-    <p class="text-xl text-base-content/70 max-w-2xl mx-auto">
-        Explorando el mundo del QA, la Ingeniería de Software y el Agilismo.
+<div class="py-12 text-center max-w-3xl mx-auto">
+    <h1 class="text-4xl md:text-5xl font-extrabold font-heading mb-4 text-base-content uppercase">
+        Blog de <span class="text-primary">Maqaronesia</span>
+    </h1>
+    <p class="text-lg text-base-content/60 font-medium tracking-tight">
+        Ingeniería, Calidad y Agilidad en el desarrollo de software.
     </p>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
     {% for post in posts %}
-    <div class="card bg-base-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
+    <div
+        class="card premium-card bg-base-100 flex flex-col h-full overflow-hidden border border-base-200 hover:border-primary/30 transition-all group">
         {% if post.image %}
-        <figure class="px-4 pt-4">
-            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="rounded-xl h-48 w-full object-cover" />
-        </figure>
+        <a href="{% url 'blog:post_detail' post.slug %}" class="block aspect-video overflow-hidden">
+            <img src="{{ post.image.url }}" alt="{{ post.title }}"
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+        </a>
         {% endif %}
-        <div class="card-body">
-            <div class="flex justify-between items-center mb-2">
+
+        <div class="p-6 flex flex-col flex-grow">
+            <div
+                class="flex items-center gap-2 mb-3 text-[0.6rem] font-bold uppercase tracking-widest text-base-content/40">
                 {% if post.category %}
-                <div class="badge badge-secondary badge-outline">{{ post.category.name }}</div>
+                <span class="text-primary">{{ post.category.name }}</span>
                 {% else %}
-                <div class="badge badge-ghost">General</div>
+                <span>General</span>
                 {% endif %}
-                <span class="text-xs text-base-content/60">
-                    {{ post.published_at|date:"M d, Y" }} • {{ post.read_time }} min
-                </span>
+                <span>•</span>
+                <span>{{ post.read_time }} MIN</span>
             </div>
-            <h2 class="card-title font-heading">
-                <a href="{% url 'blog:post_detail' post.slug %}" class="hover:text-primary transition-colors">
-                    {{ post.title }}
-                </a>
+
+            <h2 class="text-xl font-heading font-extrabold mb-3 group-hover:text-primary transition-colors">
+                <a href="{% url 'blog:post_detail' post.slug %}">{{ post.title }}</a>
             </h2>
-            <p class="text-base-content/80 text-sm line-clamp-3">
+
+            <p class="text-sm text-base-content/60 line-clamp-2 mb-6">
                 {{ post.excerpt|default:post.content|striptags|truncatewords:20 }}
             </p>
-            <div class="card-actions justify-end mt-4 items-center">
-                <div class="avatar placeholder mr-auto">
-                    <div class="bg-neutral text-neutral-content rounded-full w-8">
-                        <span class="text-xs">{{ post.author.username|first|upper }}</span>
-                    </div>
+
+            <div class="mt-auto pt-6 flex justify-between items-center">
+                <div class="flex items-center gap-2 text-[0.6rem] font-bold text-base-content/40 uppercase">
+                    <span>{{ post.author.username }}</span>
+                    <span>•</span>
+                    <span>{{ post.published_at|date:"d M Y" }}</span>
                 </div>
-                <a href="{% url 'blog:post_detail' post.slug %}" class="btn btn-primary btn-sm">Leer más</a>
-            </div>
-        </div>
-    </div>
-    {% empty %}
-    <div class="col-span-full text-center py-20">
-        <div class="hero bg-base-200 rounded-box p-10">
-            <div class="hero-content text-center">
-                <div class="max-w-md">
-                    <h1 class="text-3xl font-bold">Aún no hay artículos</h1>
-                    <p class="py-6">Estamos preparando contenido increíble para ti. Vuelve pronto.</p>
-                </div>
+                <a href="{% url 'blog:post_detail' post.slug %}"
+                    class="btn btn-primary btn-xs rounded-lg px-4 font-bold uppercase tracking-tighter">
+                    Leer más
+                </a>
             </div>
         </div>
     </div>

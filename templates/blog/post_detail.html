@@ -3,67 +3,56 @@
 {% block title %}{{ post.title }} | Maqaronesia{% endblock %}
 
 {% block content %}
-<article class="max-w-4xl mx-auto">
-    <!-- Header -->
-    <div class="text-center mb-8">
-        <div class="flex justify-center gap-2 mb-4">
-            {% if post.category %}
-            <div class="badge badge-primary">{{ post.category.name }}</div>
-            {% endif %}
-            {% for tag in post.tags.all %}
-            <div class="badge badge-ghost">#{{ tag.name }}</div>
-            {% endfor %}
+<article class="max-w-2xl mx-auto pt-8">
+    <header class="mb-10">
+        <div class="text-[0.6rem] font-bold uppercase tracking-widest text-primary mb-2">
+            {% if post.category %}{{ post.category.name }}{% else %}General{% endif %}
         </div>
-        <h1 class="text-4xl md:text-5xl font-extrabold font-heading mb-4 leading-tight">
-            {{ post.title }}
-        </h1>
-        <div class="flex items-center justify-center gap-4 text-sm text-base-content/70">
-            <!-- DEBUG MARKER: If you see this, the file updated -->
-            <span class="flex items-center gap-1">
-                <i data-lucide="user" class="w-4 h-4"></i>
-                {{ post.author.username }}
-            </span>
-            <span class="flex items-center gap-1">
-                <i data-lucide="calendar" class="w-4 h-4"></i>
-                {{ post.published_at|date:"F d, Y" }}
-            </span>
-            <span class="flex items-center gap-1">
-                <i data-lucide="clock" class="w-4 h-4"></i>
-                {{ post.read_time }} min read
-            </span>
-        </div>
-    </div>
+        <h1 class="text-3xl md:text-5xl font-extrabold font-heading text-base-content mb-6">{{ post.title }}</h1>
 
-    <!-- Featured Image -->
+        <div
+            class="flex items-center justify-between text-[0.6rem] font-bold text-base-content/40 uppercase tracking-widest py-4 border-y border-base-200">
+            <span>{{ post.author.username }} • {{ post.published_at|date:"d M, Y" }}</span>
+            <span>{{ post.read_time }} MIN READ</span>
+        </div>
+    </header>
+
     {% if post.image %}
-    <div class="mb-10 rounded-3xl overflow-hidden shadow-2xl">
-        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-auto object-cover max-h-[500px]">
+    <div class="mb-10 rounded-xl overflow-hidden border border-base-200 shadow-sm">
+        <img src="{{ post.image.url }}" alt="{{ post.title }}" class="w-full h-auto">
     </div>
     {% endif %}
 
-    <!-- Content -->
     <div
-        class="prose prose-lg md:prose-xl mx-auto prose-headings:font-heading prose-a:text-primary hover:prose-a:text-primary-focus">
+        class="prose prose-slate max-w-none mb-12 prose-headings:font-heading prose-headings:font-extrabold prose-p:text-base-content/80 prose-a:text-primary prose-a:no-underline hover:prose-a:underline">
         {{ post.content|linebreaks }}
     </div>
 
-    <!-- Author Bio / Footer -->
-    <div class="mt-16 p-8 bg-base-200 rounded-2xl flex flex-col md:flex-row items-center md:items-start gap-6">
-        <div class="avatar placeholder">
-            <div class="bg-neutral text-neutral-content rounded-full w-20 h-20 text-3xl">
-                <span>{{ post.author.username|first|upper }}</span>
-            </div>
-        </div>
-        <div class="text-center md:text-left">
-            <h3 class="text-xl font-bold">Written by {{ post.author.username }}</h3>
-            <p class="mt-2 text-base-content/80">
-                Divulgador tecnológico y apasionado por la calidad del software.
-            </p>
-            <div class="mt-4 flex justify-center md:justify-start gap-3">
-                <button class="btn btn-circle btn-sm btn-ghost"><i data-lucide="twitter" class="w-4 h-4"></i></button>
-                <button class="btn btn-circle btn-sm btn-ghost"><i data-lucide="linkedin" class="w-4 h-4"></i></button>
-            </div>
-        </div>
+    {% if post.tags.all %}
+    <div class="flex flex-wrap gap-2 mb-16 pt-8 border-t border-base-200">
+        {% for tag in post.tags.all %}
+        <span
+            class="badge badge-sm bg-base-200 border-none text-[0.6rem] font-bold uppercase tracking-widest px-3 py-3">#{{
+            tag.name }}</span>
+        {% endfor %}
     </div>
+    {% endif %}
+
+    <section class="bg-base-200 rounded-2xl p-8 border border-base-300">
+        <div class="flex items-center gap-6">
+            <div class="avatar placeholder">
+                <div
+                    class="bg-primary text-white rounded-xl w-16 h-16 text-2xl font-extrabold flex items-center justify-center">
+                    {{ post.author.username|first|upper }}
+                </div>
+            </div>
+            <div>
+                <span class="text-[0.5rem] font-bold uppercase tracking-widest text-primary">Enviado por</span>
+                <h3 class="text-lg font-heading font-extrabold text-base-content">{{ post.author.username }}</h3>
+                <p class="text-xs text-base-content/60 mt-1 max-w-md">Divulgador tecnológico apasionado por la
+                    excelencia técnica.</p>
+            </div>
+        </div>
+    </section>
 </article>
 {% endblock %}

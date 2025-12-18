@@ -1,0 +1,111 @@
+/* Maqaronesia CSS - Forced Orange & Discrete Layout */
+
+:root {
+    /* Primary Orange */
+    --primary-color: #f97316;
+    --primary-hover: #ea580c;
+
+    /* Dark Grey Palette */
+    --dark-bg: #1e293b;
+    --text-main: #334155;
+
+    /* DaisyUI Overrides */
+    --p: 26 90% 55%;
+    --pf: 26 90% 45%;
+    --pc: 0 0% 100%;
+
+    --s: 215 25% 15%;
+    --sf: 215 25% 10%;
+    --sc: 0 0% 100%;
+
+    /* Base Colors */
+    --b1: 0 0% 100% !important;
+    --b2: 215 25% 15% !important;
+    /* Dark Grey for footer/sections */
+    --b3: 210 40% 96% !important;
+    --bc: 215 25% 20% !important;
+}
+
+/* Force Primary Buttons */
+.btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover {
+    background-color: var(--primary-hover) !important;
+    border-color: var(--primary-hover) !important;
+}
+
+/* Links and Texts */
+.text-primary {
+    color: var(--primary-color) !important;
+}
+
+.hover\:text-primary:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Cards */
+.premium-card {
+    border: 1px solid #e2e8f0 !important;
+    background-color: #ffffff !important;
+    transition: all 0.2s ease;
+}
+
+.premium-card:hover {
+    border-color: rgba(249, 115, 22, 0.4) !important;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+/* Layout */
+.glass-nav {
+    background-color: rgba(255, 255, 255, 0.98) !important;
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e2e8f0 !important;
+}
+
+/* Global Typography */
+body {
+    background-color: #ffffff !important;
+    color: var(--text-main) !important;
+    font-family: 'Inter', sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+.font-heading {
+    font-family: 'Outfit', sans-serif;
+    color: #0f172a !important;
+}
+
+/* Footer & Dark Sections */
+.footer-dark {
+    background-color: var(--dark-bg) !important;
+    color: #f8fafc !important;
+}
+
+.footer-dark .font-heading {
+    color: #ffffff !important;
+}
+
+.footer-dark a {
+    color: rgba(255, 255, 255, 0.7);
+}
+
+.footer-dark a:hover {
+    color: var(--primary-color);
+}
+
+/* Small adjustments */
+.prose a {
+    color: var(--primary-color);
+    font-weight: 700;
+}
+
+.prose a:hover {
+    text-decoration: underline;
+}

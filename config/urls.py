@@ -22,8 +22,8 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', include('apps.blog.urls')), # Set blog as homepage for now
     path('courses/', include('apps.courses.urls')),
+    path('', include('apps.blog.urls')), # Blog as homepage, but moved after courses
 ]
 
 if settings.DEBUG:

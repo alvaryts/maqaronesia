@@ -3,39 +3,51 @@
 {% block title %}{{ course.title }} | Maqaronesia{% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-    <!-- Main Content: Header + Curriculum -->
-    <div class="lg:col-span-2 space-y-8">
-        <div class="prose max-w-none">
-            <h1 class="font-heading mb-2">{{ course.title }}</h1>
-            <p class="lead">{{ course.description }}</p>
-        </div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-12 pt-8">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-12">
+        <header>
+            <div
+                class="badge badge-primary badge-outline mb-4 px-3 py-3 font-bold uppercase tracking-widest text-[0.6rem]">
+                Curso Premium</div>
+            <h1
+                class="text-3xl md:text-5xl font-extrabold font-heading mb-6 tracking-tight text-base-content leading-tight">
+                {{ course.title }}</h1>
+            <p class="text-lg text-base-content/60 leading-relaxed font-medium">{{ course.description }}</p>
+        </header>
 
-        <div class="divider">Curriculum</div>
+        <div class="divider uppercase tracking-widest font-bold text-[0.6rem] text-base-content/30 py-4">Temario del
+            Curso</div>
 
-        <div class="join join-vertical w-full">
+        <div class="space-y-4">
             {% for module in course.modules.all %}
-            <div class="collapse collapse-arrow join-item border border-base-300">
-                <input type="radio" name="my-accordion-4" {% if forloop.first %}checked="checked" {% endif %} />
-                <div class="collapse-title text-xl font-medium flex items-center gap-3 bg-base-200">
-                    <span class="badge badge-neutral">{{ module.order }}</span>
+            <div class="collapse collapse-arrow bg-base-100 border border-base-200 rounded-2xl overflow-hidden">
+                <input type="radio" name="curriculum-accordion" {% if forloop.first %}checked="checked" {% endif %} />
+                <div class="collapse-title text-base font-bold flex items-center gap-4 py-5 px-6">
+                    <span
+                        class="w-6 h-6 rounded-lg bg-primary/10 text-primary flex items-center justify-center font-extrabold text-xs">{{
+                        module.order }}</span>
                     {{ module.title }}
                 </div>
-                <div class="collapse-content bg-base-100">
-                    <ul class="menu w-full p-0 pt-2">
+                <div class="collapse-content px-0">
+                    <ul class="menu w-full p-0">
                         {% for lesson in module.lessons.all %}
-                        <li>
+                        <li class="border-t border-base-100">
                             <a href="{% if is_enrolled or lesson.is_free_preview %}{% url 'courses:lesson_detail' course.slug lesson.slug %}{% else %}#{% endif %}"
-                                class="flex justify-between items-center group {% if not is_enrolled and not lesson.is_free_preview %}disabled cursor-not-allowed opacity-50{% endif %}">
-                                <span class="flex items-center gap-2">
-                                    <i data-lucide="play-circle" class="w-4 h-4 group-hover:text-primary"></i>
+                                class="flex justify-between items-center py-4 px-6 group {% if not is_enrolled and not lesson.is_free_preview %}opacity-50 pointer-events-none{% endif %}">
+                                <span
+                                    class="flex items-center gap-3 font-semibold text-sm text-base-content/80 group-hover:text-primary transition-colors">
+                                    <i data-lucide="play-circle" class="w-4 h-4 opacity-40 group-hover:opacity-100"></i>
                                     {{ lesson.title }}
                                 </span>
-                                {% if lesson.is_free_preview %}
-                                <span class="badge badge-success badge-sm badge-outline">Preview</span>
-                                {% elif not is_enrolled %}
-                                <i data-lucide="lock" class="w-3 h-3"></i>
-                                {% endif %}
+                                <div class="flex items-center gap-2">
+                                    {% if lesson.is_free_preview %}
+                                    <span
+                                        class="badge badge-xs bg-success/10 text-success border-none font-bold uppercase tracking-widest px-2">Preview</span>
+                                    {% elif not is_enrolled %}
+                                    <i data-lucide="lock" class="w-3.5 h-3.5 opacity-30"></i>
+                                    {% endif %}
+                                </div>
                             </a>
                         </li>
                         {% endfor %}
@@ -43,57 +55,55 @@
                 </div>
             </div>
             {% empty %}
-            <div class="alert alert-warning">Este curso aún no tiene contenido.</div>
+            <div class="alert bg-base-200 border-none rounded-2xl">
+                <i data-lucide="info" class="text-primary"></i>
+                <span class="font-medium text-sm">Contenido próximamente.</span>
+            </div>
             {% endfor %}
         </div>
     </div>
 
-    <!-- Sidebar: Actions -->
+    <!-- Sidebar -->
     <div class="lg:col-span-1">
-        <div class="card bg-base-100 shadow-xl border border-base-200 sticky top-24">
-            <figure class="p-4 pb-0">
+        <div class="card bg-base-100 border border-base-200 rounded-3xl overflow-hidden sticky top-24 shadow-sm">
+            <div class="aspect-video relative overflow-hidden">
                 {% if course.image %}
-                <img src="{{ course.image.url }}" alt="Course Cover" class="rounded-xl w-full" />
+                <img src="{{ course.image.url }}" alt="Course Cover" class="w-full h-full object-cover" />
                 {% else %}
-                <div class="w-full h-48 bg-neutral rounded-xl flex items-center justify-center text-neutral-content">
-                    <i data-lucide="monitor-play" class="w-16 h-16"></i>
+                <div class="w-full h-full bg-base-200 flex items-center justify-center">
+                    <i data-lucide="monitor-play" class="w-16 h-16 text-base-content/10"></i>
                 </div>
                 {% endif %}
-            </figure>
-            <div class="card-body">
-                <div class="flex justify-between items-center mb-4">
-                    <span class="text-3xl font-bold font-heading">
-                        {% if course.price == 0 %}Gratis{% else %}${{ course.price }}{% endif %}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent flex items-end p-6">
+                    <span class="text-white text-2xl font-extrabold font-heading">
+                        {% if course.price == 0 %}Gratis{% else %}{{ course.price }}€{% endif %}
                     </span>
-                    {% if is_enrolled %}
-                    <div class="badge badge-success p-3"><i data-lucide="check" class="w-3 h-3 mr-1"></i> Tienes acceso
-                    </div>
-                    {% endif %}
                 </div>
+            </div>
 
+            <div class="p-6 space-y-6">
                 {% if is_enrolled %}
-                <a href="#" class="btn btn-primary btn-block">Continuar Aprendiendo</a>
+                <div class="bg-success/5 border border-success/10 p-4 rounded-xl flex items-center gap-3">
+                    <i data-lucide="check-circle" class="text-success w-5 h-5"></i>
+                    <div class="font-bold text-success text-sm">Ya tienes acceso</div>
+                </div>
+                <a href="#" class="btn btn-primary btn-block rounded-xl font-bold">Continuar Curso</a>
                 {% else %}
                 <form action="{% url 'courses:enroll_course' course.slug %}" method="post">
                     {% csrf_token %}
-                    <button
-                        class="btn btn-primary btn-block shadow-lg shadow-primary/30 animate-pulse hover:animate-none">
-                        Inscribirse Ahora
-                    </button>
+                    <button class="btn btn-primary btn-block rounded-xl font-bold">Inscribirse Ahora</button>
                 </form>
-                <p class="text-xs text-center text-base-content/60 mt-2">Garantía de satisfacción de 30 días</p>
                 {% endif %}
 
-                <div class="divider"></div>
-                <ul class="space-y-3 text-sm">
-                    <li class="flex items-center gap-2"><i data-lucide="bar-chart" class="w-4 h-4 text-primary"></i>
-                        Nivel Intermedio</li>
-                    <li class="flex items-center gap-2"><i data-lucide="clock" class="w-4 h-4 text-primary"></i> 12
-                        Horas de video</li>
-                    <li class="flex items-center gap-2"><i data-lucide="smartphone" class="w-4 h-4 text-primary"></i>
-                        Acceso en móvil</li>
-                    <li class="flex items-center gap-2"><i data-lucide="award" class="w-4 h-4 text-primary"></i>
-                        Certificado al finalizar</li>
+                <ul class="space-y-4 pt-4 border-t border-base-100">
+                    <li
+                        class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-base-content/60">
+                        <i data-lucide="award" class="w-4 h-4 text-primary"></i> Certificado final
+                    </li>
+                    <li
+                        class="flex items-center gap-3 text-xs font-bold uppercase tracking-widest text-base-content/60">
+                        <i data-lucide="infinity" class="w-4 h-4 text-primary"></i> Acceso de por vida
+                    </li>
                 </ul>
             </div>
         </div>
