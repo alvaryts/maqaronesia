@@ -50,6 +50,9 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
     slug_url_kwarg = 'slug'
 
     def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            return super().dispatch(request, *args, **kwargs)
+            
         lesson = self.get_object()
         course = lesson.module.course
         
@@ -60,7 +63,7 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
             messages.error(request, "You must enroll in this course to view this lesson.")
             return redirect('courses:course_detail', slug=course.slug)
             
-        # Mark progress logic could go here or in a separate API/POST
+        # Mark progress logic
         UserLessonProgress.objects.get_or_create(user=request.user, lesson=lesson)
         
         return super().dispatch(request, *args, **kwargs)
