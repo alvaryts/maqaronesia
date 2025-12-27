@@ -50,7 +50,7 @@
                     <span>{{ post.published_at|date:"d M Y" }}</span>
                 </div>
                 <a href="{% url 'blog:post_detail' post.slug %}"
-                    class="btn btn-primary btn-xs rounded-lg px-4 font-bold uppercase tracking-tighter">
+                    class="btn btn-sm btn-ghost border border-base-300 hover:border-primary hover:text-primary rounded-lg px-4 transition-all">
                     Leer más
                 </a>
             </div>
