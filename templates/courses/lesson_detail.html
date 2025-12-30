@@ -34,23 +34,82 @@
             </div>
             {% endif %}
 
-            <div class="prose prose-slate max-w-none mb-16">
-                {{ lesson.content|linebreaks }}
+            <!-- Markdown & Syntax Highlighting Dependencies -->
+            <link rel="stylesheet"
+                href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css">
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.0/marked.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/django.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"></script>
+
+            <!-- Raw Content (Hidden) -->
+            <div id="raw-content" style="display: none;">
+                {{ lesson.content }}
             </div>
+
+            <!-- Rendered Content -->
+            <div id="markdown-content"
+                class="prose prose-slate max-w-none mb-16 prose-headings:font-heading prose-headings:font-extrabold prose-pre:bg-gray-50 prose-pre:border prose-pre:border-gray-200 prose-pre:text-sm prose-code:text-primary prose-a:text-primary">
+                <!-- Content will be injected here -->
+            </div>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', (event) => {
+                    const rawContent = document.getElementById('raw-content').textContent;
+                    const targetDiv = document.getElementById('markdown-content');
+
+                    // Configure marked to use highlight.js
+                    marked.setOptions({
+                        highlight: function (code, lang) {
+                            const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+                            return hljs.highlight(code, { language }).value;
+                        },
+                        langPrefix: 'hljs language-'
+                    });
+
+                    // Parse and inject
+                    targetDiv.innerHTML = marked.parse(rawContent);
+                });
+            </script>
 
             <!-- Navigation -->
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 pt-8 border-t border-base-200">
-                <button class="btn btn-sm btn-ghost border border-base-300 rounded-xl px-6 gap-2">
+                {% if prev_lesson %}
+                <a href="{% url 'courses:lesson_detail' lesson.module.course.slug prev_lesson.slug %}"
+                    class="btn btn-sm btn-ghost border border-base-300 rounded-xl px-6 gap-2">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i> Anterior
+                </a>
+                {% else %}
+                <button
+                    class="btn btn-sm btn-ghost border border-base-100 rounded-xl px-6 gap-2 opacity-30 cursor-not-allowed"
+                    disabled>
                     <i data-lucide="arrow-left" class="w-4 h-4"></i> Anterior
                 </button>
+                {% endif %}
 
-                <button class="btn btn-primary rounded-xl px-8 font-bold">
-                    Completada <i data-lucide="check-circle" class="w-4 h-4 ml-2"></i>
-                </button>
+                <form action="{% url 'courses:toggle_complete' lesson.module.course.slug lesson.slug %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit"
+                        class="btn {% if is_completed %}btn-success{% else %}btn-primary{% endif %} rounded-xl px-8 font-bold">
+                        {% if is_completed %}Completada{% else %}Marcar como completada{% endif %}
+                        <i data-lucide="{% if is_completed %}check-circle-2{% else %}check-circle{% endif %}"
+                            class="w-4 h-4 ml-2"></i>
+                    </button>
+                </form>
 
-                <button class="btn btn-sm btn-ghost border border-base-300 rounded-xl px-6 gap-2">
+                {% if next_lesson %}
+                <a href="{% url 'courses:lesson_detail' lesson.module.course.slug next_lesson.slug %}"
+                    class="btn btn-sm btn-ghost border border-base-300 rounded-xl px-6 gap-2">
+                    Siguiente <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </a>
+                {% else %}
+                <button
+                    class="btn btn-sm btn-ghost border border-base-100 rounded-xl px-6 gap-2 opacity-30 cursor-not-allowed"
+                    disabled>
                     Siguiente <i data-lucide="arrow-right" class="w-4 h-4"></i>
                 </button>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -60,12 +119,22 @@
         <label for="course-drawer" class="drawer-overlay"></label>
         <div class="w-80 min-h-full bg-base-200 border-r border-base-300 flex flex-col">
             <div class="p-6">
-                <h2 class="font-heading font-extrabold text-lg text-base-content mb-4">{{ lesson.module.course.title }}
-                </h2>
-                <div class="h-1.5 w-full bg-base-300 rounded-full overflow-hidden">
-                    <div class="h-full bg-primary" style="width: 40%"></div>
-                </div>
-                <div class="text-[0.6rem] font-bold uppercase tracking-widest text-base-content/40 mt-2">40% Completado
+                <div class="flex items-center gap-4">
+                    <!-- Donut Progress Chart -->
+                    <div class="relative w-16 h-16 rounded-full flex items-center justify-center shadow-md bg-[#1f2937] shrink-0"
+                        style="background: conic-gradient(hsl(var(--p)) {{ progress_percent }}%, transparent 0)">
+                        <div class="absolute inset-[8px] rounded-full bg-base-200 flex items-center justify-center">
+                            <div class="flex flex-col items-center leading-none">
+                                <span class="text-[0.8rem] font-black text-base-content">{{ progress_percent }}%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col min-w-0">
+                        <h2 class="font-heading font-extrabold text-base text-base-content leading-tight break-words">{{ lesson.module.course.title }}</h2>
+                        <div class="text-[0.6rem] font-bold uppercase tracking-widest text-base-content/40 mt-1">
+                            Progreso General</div>
+                    </div>
                 </div>
             </div>
 
@@ -84,8 +153,8 @@
                             <li>
                                 <a href="{% url 'courses:lesson_detail' lesson.module.course.slug l.slug %}"
                                     class="py-3 px-6 gap-3 rounded-none border-t border-base-200 {% if l == lesson %}bg-primary/5 text-primary border-l-4 border-primary{% else %}text-base-content/60{% endif %}">
-                                    <i data-lucide="{% if l == lesson %}play{% else %}circle{% endif %}"
-                                        class="w-3.5 h-3.5"></i>
+                                    <i data-lucide="{% if l == lesson %}play{% elif l.id in completed_lessons_ids %}check-circle-2{% else %}circle{% endif %}"
+                                        class="w-3.5 h-3.5 {% if l.id in completed_lessons_ids and l != lesson %}text-success{% endif %}"></i>
                                     <span class="text-[0.7rem] font-bold">{{ l.title }}</span>
                                 </a>
                             </li>

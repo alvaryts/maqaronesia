@@ -63,8 +63,7 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
             messages.error(request, "You must enroll in this course to view this lesson.")
             return redirect('courses:course_detail', slug=course.slug)
             
-        # Mark progress logic
-        UserLessonProgress.objects.get_or_create(user=request.user, lesson=lesson)
+        # We don't mark progress automatically anymore, we'll use the button.
         
         return super().dispatch(request, *args, **kwargs)
 
@@ -81,6 +80,55 @@ class LessonDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        course = self.object.module.course
-        # Get next/prev lesson logic could be added here
+        lesson = self.object
+        course = lesson.module.course
+        user = self.request.user
+        
+        # Get all lessons of the course ordered by module then lesson order
+        all_lessons = list(Lesson.objects.filter(module__course=course).order_by('module__order', 'order'))
+        total_lessons = len(all_lessons)
+        
+        # Get completed lessons for this user in this course
+        completed_lessons_ids = UserLessonProgress.objects.filter(
+            user=user, 
+            lesson__module__course=course
+        ).values_list('lesson_id', flat=True)
+        
+        completed_count = len(completed_lessons_ids)
+        
+        # Calculate progress
+        progress_percent = int((completed_count / total_lessons) * 100) if total_lessons > 0 else 0
+        
+        try:
+            current_index = all_lessons.index(lesson)
+            context['prev_lesson'] = all_lessons[current_index - 1] if current_index > 0 else None
+            context['next_lesson'] = all_lessons[current_index + 1] if current_index < len(all_lessons) - 1 else None
+        except ValueError:
+            context['prev_lesson'] = None
+            context['next_lesson'] = None
+            
+        context['progress_percent'] = progress_percent
+        context['completed_lessons_ids'] = completed_lessons_ids
+        context['is_completed'] = lesson.id in completed_lessons_ids
+        
         return context
+
+class ToggleLessonCompleteView(LoginRequiredMixin, View):
+    def post(self, request, course_slug, lesson_slug):
+        lesson = get_object_or_404(Lesson, module__course__slug=course_slug, slug=lesson_slug)
+        
+        # Enrollment check
+        is_enrolled = UserCourseAccess.objects.filter(user=request.user, course=lesson.module.course).exists()
+        if not is_enrolled and not lesson.is_free_preview:
+            return redirect('courses:course_detail', slug=lesson.module.course.slug)
+
+        progress, created = UserLessonProgress.objects.get_or_create(user=request.user, lesson=lesson)
+        
+        if not created:
+            # If it already existed, we "uncomplete" it (toggle behavior)
+            progress.delete()
+            messages.info(request, f"Lección '{lesson.title}' marcada como no completada.")
+        else:
+            messages.success(request, f"¡Lección '{lesson.title}' completada!")
+            
+        return redirect('courses:lesson_detail', course_slug=course_slug, lesson_slug=lesson_slug)
