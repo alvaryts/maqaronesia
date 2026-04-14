@@ -8,6 +8,8 @@ import Courses from './pages/Courses'
 import CourseDetail from './pages/CourseDetail'
 import LessonDetail from './pages/LessonDetail'
 import Login from './pages/Login'
+import AdminPosts from './pages/AdminPosts'
+import AdminPostEditor from './pages/AdminPostEditor'
 
 export default function App() {
   return (
@@ -22,6 +24,8 @@ export default function App() {
             <Route path="/courses/:slug" element={<CourseDetail />} />
             <Route path="/courses/:courseSlug/lessons/:lessonSlug" element={<LessonDetail />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/admin" element={<AdminPosts />} />
+            <Route path="/admin/posts/:id" element={<AdminPostEditor />} />
           </Route>
         </Routes>
       </BrowserRouter>

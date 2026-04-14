@@ -57,7 +57,7 @@ export default function PostDetail() {
               <span className="subheading !text-lg">{post.excerpt}</span>
             )}
             <span className="subheading !text-base !font-normal italic mt-4">
-              Publicado por {post.profiles?.username ?? 'MaQAronesia'}
+              Publicado por {post.profiles?.username ?? 'maqaronesia.com'}
               {post.published_at && ` el ${formatDate(post.published_at)}`}
             </span>
           </div>

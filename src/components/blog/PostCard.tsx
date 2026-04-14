@@ -21,7 +21,7 @@ export default function PostCard({ post }: PostCardProps) {
       </Link>
       <p className="post-meta">
         Publicado por{' '}
-        <span className="text-foreground">{post.profiles?.username ?? 'MaQAronesia'}</span>
+        <span className="text-foreground">{post.profiles?.username ?? 'maqaronesia.com'}</span>
         {post.published_at && ` el ${formatDate(post.published_at)}`}
       </p>
     </article>

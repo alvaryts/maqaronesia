@@ -4,6 +4,7 @@
 @theme {
   --font-heading: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-body: "Lora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-brand: "Space Mono", "Courier New", monospace;
 
   --color-primary: #0085A1;
   --color-primary-hover: #006a81;
@@ -59,11 +60,28 @@ hr {
   margin: 2rem 0;
 }
 
+/* ── Latest badge ── */
+.latest-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  background: var(--color-primary);
+  color: #fff;
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.6rem;
+  border-radius: 0.25rem;
+  line-height: 1;
+}
+
 /* ── Masthead ── */
 .masthead {
   position: relative;
-  padding-top: calc(8rem + 57px);
-  padding-bottom: 8rem;
+  padding-top: calc(3.5rem + 57px);
+  padding-bottom: 3.5rem;
   background: no-repeat center center;
   background-color: var(--color-muted-foreground);
   background-size: cover;
@@ -87,7 +105,9 @@ hr {
   color: #fff;
 }
 .masthead .masthead-content h1 {
+  font-family: var(--font-brand);
   font-size: 2.75rem;
+  letter-spacing: -0.02em;
 }
 .masthead .masthead-content .subheading {
   font-size: 1.25rem;
@@ -99,11 +119,11 @@ hr {
 }
 @media (min-width: 768px) {
   .masthead {
-    padding-top: 12.5rem;
-    padding-bottom: 12.5rem;
+    padding-top: 6rem;
+    padding-bottom: 6rem;
   }
   .masthead .masthead-content h1 {
-    font-size: 4rem;
+    font-size: 3rem;
   }
   .masthead .masthead-content .subheading {
     font-size: 1.5rem;

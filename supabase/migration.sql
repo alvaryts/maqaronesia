@@ -103,6 +103,11 @@ create policy "Staff can update posts"
     exists (select 1 from profiles where id = auth.uid() and is_staff = true)
   );
 
+create policy "Staff can delete posts"
+  on posts for delete using (
+    exists (select 1 from profiles where id = auth.uid() and is_staff = true)
+  );
+
 -- ── 5. Blog: Post-Tags junction ──
 create table if not exists post_tags (
   post_id bigint references posts(id) on delete cascade,
@@ -113,6 +118,11 @@ create table if not exists post_tags (
 alter table post_tags enable row level security;
 create policy "Post tags are viewable by everyone"
   on post_tags for select using (true);
+
+create policy "Staff can manage post tags"
+  on post_tags for all using (
+    exists (select 1 from profiles where id = auth.uid() and is_staff = true)
+  );
 
 -- ── 6. Courses ──
 create table if not exists courses (

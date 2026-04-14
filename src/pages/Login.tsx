@@ -1,14 +1,16 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { Navigate } from 'react-router-dom'
-import { Mail, ArrowRight, CheckCircle2 } from 'lucide-react'
+import { Mail, ArrowRight, CheckCircle2, Lock } from 'lucide-react'
 
 export default function Login() {
-  const { user, loading, signInWithMagicLink } = useAuth()
+  const { user, loading, signInWithMagicLink, signInWithPassword } = useAuth()
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
   const [sent, setSent] = useState(false)
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  const [mode, setMode] = useState<'magic' | 'password'>('password')
 
   if (loading) return null
   if (user) return <Navigate to="/" replace />
@@ -17,12 +19,19 @@ export default function Login() {
     e.preventDefault()
     setError('')
     setSubmitting(true)
-    const { error } = await signInWithMagicLink(email)
-    setSubmitting(false)
-    if (error) {
-      setError(error.message)
+
+    if (mode === 'password') {
+      const { error } = await signInWithPassword(email, password)
+      setSubmitting(false)
+      if (error) setError(error.message)
     } else {
-      setSent(true)
+      const { error } = await signInWithMagicLink(email)
+      setSubmitting(false)
+      if (error) {
+        setError(error.message)
+      } else {
+        setSent(true)
+      }
     }
   }
 
@@ -32,7 +41,7 @@ export default function Login() {
       <header className="masthead" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1432821596592-e2c18b78144f?auto=format&fit=crop&w=1920&q=80')" }}>
         <div className="masthead-content max-w-4xl mx-auto px-4 lg:px-0 text-center">
           <h1>Iniciar Sesión</h1>
-          <span className="subheading">Accede a tu cuenta de MaQAronesia</span>
+          <span className="subheading">Accede a tu cuenta de maqaronesia.com</span>
         </div>
       </header>
 
@@ -49,27 +58,46 @@ export default function Login() {
         ) : (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="relative">
-              <Mail className="absolute left-0 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 placeholder="tu@email.com"
-                className="form-clean pl-8"
+                className="form-clean !pl-10"
               />
             </div>
+            {mode === 'password' && (
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground pointer-events-none" />
+                <input
+                  type="password"
+                  required
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder="Contraseña"
+                  className="form-clean !pl-10"
+                />
+              </div>
+            )}
             {error && <p className="text-error text-sm">{error}</p>}
             <button
               type="submit"
               disabled={submitting}
               className="btn-clean w-full flex items-center justify-center gap-2 disabled:opacity-50"
             >
-              {submitting ? 'Enviando...' : 'Enviar enlace mágico'}
+              {submitting ? 'Enviando...' : mode === 'password' ? 'Iniciar Sesión' : 'Enviar enlace mágico'}
               <ArrowRight className="w-4 h-4" />
             </button>
             <p className="text-muted-foreground text-sm text-center">
-              Recibirás un enlace por email para acceder sin contraseña.
+              <button
+                type="button"
+                onClick={() => setMode(mode === 'password' ? 'magic' : 'password')}
+                className="text-primary hover:underline"
+              >
+                {mode === 'password' ? 'Usar enlace mágico' : 'Usar contraseña'}
+              </button>
             </p>
           </form>
         )}

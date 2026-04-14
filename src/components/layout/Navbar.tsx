@@ -27,8 +27,8 @@ export default function Navbar() {
     <header className={`clean-nav ${scrolled ? 'scrolled' : ''}`}>
       <div className="max-w-4xl mx-auto flex items-center justify-between h-14 px-4 lg:px-0">
         {/* Brand */}
-        <Link to="/" className="font-heading font-extrabold text-white text-lg tracking-tight">
-          MaQAronesia
+        <Link to="/" className="!text-white text-lg tracking-tight" style={{ fontFamily: 'var(--font-brand)', fontWeight: 700 }}>
+          maqaronesia.com
         </Link>
 
         {/* Desktop nav */}
@@ -58,14 +58,12 @@ export default function Navbar() {
                   <p className="font-bold text-heading text-sm mt-0.5">{profile?.username ?? user.email}</p>
                 </div>
                 {profile?.is_staff && (
-                  <a
-                    href={`${import.meta.env.VITE_SUPABASE_URL}`}
-                    target="_blank"
-                    rel="noreferrer"
+                  <Link
+                    to="/admin"
                     className="flex items-center gap-2 px-3 py-2 text-sm text-muted hover:text-primary transition-colors"
                   >
                     <LayoutDashboard className="w-4 h-4" /> Admin
-                  </a>
+                  </Link>
                 )}
                 <button
                   onClick={signOut}
