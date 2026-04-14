@@ -52,10 +52,10 @@ export default function Navbar() {
               <button className="nav-link flex items-center gap-1">
                 {profile?.username ?? user.email?.split('@')[0]}
               </button>
-              <div className="absolute right-0 top-full mt-1 w-48 bg-surface border border-border rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
+              <div className="absolute right-0 top-full mt-1 w-48 bg-white border border-border rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50 overflow-hidden">
                 <div className="p-3 border-b border-border">
                   <p className="text-xs text-muted-foreground">Sesión activa</p>
-                  <p className="font-bold text-white text-sm mt-0.5">{profile?.username ?? user.email}</p>
+                  <p className="font-bold text-heading text-sm mt-0.5">{profile?.username ?? user.email}</p>
                 </div>
                 {profile?.is_staff && (
                   <a
@@ -93,7 +93,7 @@ export default function Navbar() {
 
       {/* Mobile menu */}
       {menuOpen && (
-        <nav className="md:hidden border-t border-border/30 py-3 px-4 bg-background/95 animate-fade-in">
+        <nav className="md:hidden border-t border-white/20 py-3 px-4 bg-[#212529]/95 backdrop-blur-sm animate-fade-in">
           {navLinks.map(link => (
             <Link
               key={link.href}

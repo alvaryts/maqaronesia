@@ -40,9 +40,9 @@ export default function Login() {
         {sent ? (
           <div className="text-center space-y-4">
             <CheckCircle2 className="w-12 h-12 text-success mx-auto" />
-            <p className="text-white font-heading font-bold text-xl">¡Revisa tu email!</p>
+            <p className="text-heading font-heading font-bold text-xl">¡Revisa tu email!</p>
             <p className="text-muted">
-              Hemos enviado un enlace mágico a <strong className="text-white">{email}</strong>.
+              Hemos enviado un enlace mágico a <strong className="text-heading">{email}</strong>.
               Haz click en él para iniciar sesión.
             </p>
           </div>

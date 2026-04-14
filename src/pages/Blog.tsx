@@ -30,7 +30,7 @@ export default function Blog() {
           </div>
         ) : posts.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-xl font-heading font-bold text-white mb-2">Próximamente</p>
+            <p className="text-xl font-heading font-bold text-heading mb-2">Próximamente</p>
             <p className="text-muted">Estamos preparando contenido increíble. ¡Vuelve pronto!</p>
           </div>
         ) : (
@@ -39,7 +39,7 @@ export default function Blog() {
               <div key={post.id}>
                 <div className="post-preview">
                   <Link to={`/blog/${post.slug}`}>
-                    <h2 className="post-title font-heading font-extrabold text-white">
+                    <h2 className="post-title font-heading font-extrabold text-heading">
                       {post.title}
                     </h2>
                     {post.excerpt && (

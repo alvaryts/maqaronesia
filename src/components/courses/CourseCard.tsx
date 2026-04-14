@@ -31,7 +31,7 @@ export default function CourseCard({ course }: CourseCardProps) {
             {course.price === 0 ? 'Gratis' : `${course.price}€`}
           </span>
         </div>
-        <h2 className="text-xl font-heading font-extrabold mb-3 text-white leading-tight group-hover:text-primary transition-colors">
+        <h2 className="text-xl font-heading font-extrabold mb-3 text-heading leading-tight group-hover:text-primary transition-colors">
           {course.title}
         </h2>
         <p className="text-muted text-sm leading-relaxed mb-6 flex-grow line-clamp-2">

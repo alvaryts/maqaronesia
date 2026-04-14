@@ -4,7 +4,7 @@ import rehypeHighlight from 'rehype-highlight'
 import remarkGfm from 'remark-gfm'
 import { usePost } from '../hooks/usePosts'
 import { formatDate } from '../lib/utils'
-import 'highlight.js/styles/github-dark.css'
+import 'highlight.js/styles/github.css'
 
 export default function PostDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -66,7 +66,7 @@ export default function PostDetail() {
 
       {/* Content */}
       <article className="max-w-4xl mx-auto px-4 lg:px-0 py-12">
-        <div className="prose prose-invert prose-lg max-w-none">
+        <div className="prose prose-lg max-w-none">
           <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
             {post.content}
           </ReactMarkdown>
@@ -78,8 +78,7 @@ export default function PostDetail() {
             {post.tags.map(tag => (
               <span
                 key={tag.id}
-                className="bg-surface border border-border text-xs font-heading font-bold uppercase tracking-wide px-3 py-1.5 rounded"
-              >
+                className="bg-surface border border-border text-xs font-heading font-bold uppercase tracking-wide px-3 py-1.5 rounded text-muted">
                 #{tag.name}
               </span>
             ))}

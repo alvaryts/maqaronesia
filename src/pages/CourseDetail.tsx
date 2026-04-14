@@ -23,7 +23,7 @@ export default function CourseDetail() {
   if (!course) {
     return (
       <div className="text-center py-20">
-        <h1 className="text-3xl font-heading font-bold text-white mb-4">Curso no encontrado</h1>
+        <h1 className="text-3xl font-heading font-bold text-heading mb-4">Curso no encontrado</h1>
       </div>
     )
   }
@@ -76,7 +76,7 @@ export default function CourseDetail() {
         </div>
 
         {/* Modules */}
-        <h2 className="text-2xl font-heading font-extrabold text-white mb-6">Temario</h2>
+        <h2 className="text-2xl font-heading font-extrabold text-heading mb-6">Temario</h2>
         <div className="space-y-3">
           {course.modules?.map((mod, idx) => (
             <div key={mod.id} className="border border-border rounded overflow-hidden">
@@ -86,7 +86,7 @@ export default function CourseDetail() {
               >
                 <div className="flex items-center gap-3">
                   <span className="text-primary font-bold text-sm">{mod.order}.</span>
-                  <span className="font-bold text-white text-sm">{mod.title}</span>
+                  <span className="font-bold text-heading text-sm">{mod.title}</span>
                 </div>
                 <ChevronDown className={`w-4 h-4 text-muted-foreground transition-transform ${openModule === idx ? 'rotate-180' : ''}`} />
               </button>

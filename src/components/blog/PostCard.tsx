@@ -10,7 +10,7 @@ export default function PostCard({ post }: PostCardProps) {
   return (
     <article className="post-preview">
       <Link to={`/blog/${post.slug}`}>
-        <h2 className="post-title font-heading font-extrabold text-white">
+        <h2 className="post-title font-heading font-extrabold text-heading">
           {post.title}
         </h2>
         {post.excerpt && (

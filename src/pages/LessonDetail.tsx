@@ -5,7 +5,7 @@ import remarkGfm from 'remark-gfm'
 import { ArrowLeft, ArrowRight, CheckCircle2, Circle, Play, List } from 'lucide-react'
 import { useLesson } from '../hooks/useCourses'
 import { useState } from 'react'
-import 'highlight.js/styles/github-dark.css'
+import 'highlight.js/styles/github.css'
 
 export default function LessonDetail() {
   const { courseSlug, lessonSlug } = useParams<{ courseSlug: string; lessonSlug: string }>()
@@ -28,7 +28,7 @@ export default function LessonDetail() {
   if (!lesson || !course) {
     return (
       <div className="text-center py-20">
-        <h1 className="text-3xl font-heading font-bold text-white mb-4">Lección no encontrada</h1>
+        <h1 className="text-3xl font-heading font-bold text-heading mb-4">Lección no encontrada</h1>
       </div>
     )
   }
@@ -37,13 +37,13 @@ export default function LessonDetail() {
     <div className="flex min-h-[calc(100vh-64px)]">
       {/* Sidebar */}
       <aside className={`
-        fixed lg:sticky top-16 left-0 z-40 w-72 h-[calc(100vh-64px)] bg-[#0f0f0f] border-r border-border flex flex-col
+        fixed lg:sticky top-16 left-0 z-40 w-72 h-[calc(100vh-64px)] bg-surface border-r border-border flex flex-col
         transform transition-transform lg:translate-x-0
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
       `}>
         {/* Progress */}
         <div className="p-5 border-b border-border">
-          <h2 className="font-heading font-extrabold text-sm text-white leading-tight mb-2">
+          <h2 className="font-heading font-extrabold text-sm text-heading leading-tight mb-2">
             {course.title}
           </h2>
           <div className="w-full h-1.5 bg-border rounded-full overflow-hidden">
@@ -59,7 +59,7 @@ export default function LessonDetail() {
         <div className="flex-grow overflow-y-auto p-3 space-y-1">
           {course.modules?.map(mod => (
             <details key={mod.id} open={mod.lessons?.some(l => l.slug === lessonSlug)}>
-              <summary className="flex items-center gap-2 p-2.5 text-xs font-bold text-white cursor-pointer hover:bg-surface rounded transition-colors">
+              <summary className="flex items-center gap-2 p-2.5 text-xs font-bold text-heading cursor-pointer hover:bg-surface rounded transition-colors">
                 <span className="text-primary text-[0.65rem]">{mod.order}.</span>
                 {mod.title}
               </summary>
@@ -75,7 +75,7 @@ export default function LessonDetail() {
                         className={`flex items-center gap-2.5 py-2 px-5 text-[0.75rem] transition-colors rounded ${
                           isCurrent
                             ? 'bg-primary/10 text-primary border-l-2 border-primary font-bold'
-                            : 'text-muted-foreground hover:text-white'
+                            : 'text-muted-foreground hover:text-heading'
                         }`}
                       >
                         {isCurrent ? (
@@ -123,7 +123,7 @@ export default function LessonDetail() {
             </button>
           </div>
 
-          <h1 className="text-2xl md:text-4xl font-extrabold font-heading mb-8 text-white">
+          <h1 className="text-2xl md:text-4xl font-extrabold font-heading mb-8 text-heading">
             {lesson.title}
           </h1>
 
@@ -140,7 +140,7 @@ export default function LessonDetail() {
           )}
 
           {/* Content */}
-          <div className="prose prose-invert prose-lg max-w-none mb-16">
+          <div className="prose prose-lg max-w-none mb-16">
             <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
               {lesson.content}
             </ReactMarkdown>
