@@ -6,35 +6,35 @@ export default function Courses() {
 
   return (
     <div>
-      {/* Header */}
-      <div className="py-12 md:py-16 text-center max-w-3xl mx-auto">
-        <h1 className="text-4xl md:text-6xl font-extrabold font-heading mb-4 tracking-tight text-white uppercase">
-          Maqaronesia <span className="text-primary">Academy</span>
-        </h1>
-        <p className="text-lg text-muted leading-relaxed font-medium">
-          Rutas de aprendizaje estructuradas para ingenieros que buscan la excelencia.
-        </p>
-      </div>
+      {/* Masthead */}
+      <header className="masthead" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1509966756634-9c23dd6e6815?auto=format&fit=crop&w=1920&q=80')" }}>
+        <div className="masthead-content max-w-4xl mx-auto px-4 lg:px-0 text-center">
+          <h1>Academy</h1>
+          <span className="subheading">Aprende con propósito</span>
+        </div>
+      </header>
 
-      {/* Grid */}
-      {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="bg-surface border border-border rounded-2xl h-96 animate-pulse" />
-          ))}
-        </div>
-      ) : courses.length === 0 ? (
-        <div className="text-center py-20 bg-surface rounded-2xl border border-dashed border-border">
-          <p className="text-xl font-bold text-white mb-2">Próximos lanzamientos</p>
-          <p className="text-muted">Estamos puliendo los mejores cursos para ti. ¡Vuelve pronto!</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {courses.map(course => (
-            <CourseCard key={course.id} course={course} />
-          ))}
-        </div>
-      )}
+      {/* Course grid */}
+      <div className="max-w-4xl mx-auto px-4 lg:px-0 py-12">
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {[1, 2].map(i => (
+              <div key={i} className="bg-surface border border-border rounded h-72 animate-pulse" />
+            ))}
+          </div>
+        ) : courses.length === 0 ? (
+          <div className="text-center py-20">
+            <p className="text-xl font-heading font-bold text-white mb-2">Próximos lanzamientos</p>
+            <p className="text-muted">Estamos puliendo los mejores cursos para ti. ¡Vuelve pronto!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {courses.map(course => (
+              <CourseCard key={course.id} course={course} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

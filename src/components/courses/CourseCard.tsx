@@ -8,8 +8,8 @@ interface CourseCardProps {
 
 export default function CourseCard({ course }: CourseCardProps) {
   return (
-    <article className="bg-surface border border-border rounded-2xl overflow-hidden card-hover flex flex-col h-full group">
-      <div className="aspect-video relative overflow-hidden bg-surface-alt">
+    <article className="card-clean rounded overflow-hidden flex flex-col h-full group">
+      <div className="aspect-video overflow-hidden bg-surface-alt">
         {course.image_url ? (
           <img
             src={course.image_url}
@@ -17,22 +17,20 @@ export default function CourseCard({ course }: CourseCardProps) {
             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <span className="text-4xl opacity-10">📚</span>
+          <div className="w-full h-full bg-surface-alt flex items-center justify-center">
+            <span className="text-4xl opacity-20">📚</span>
           </div>
         )}
-        <div className="absolute top-4 left-4">
-          <span className={`px-3 py-1.5 rounded-full text-[0.6rem] font-bold uppercase tracking-widest ${
-            course.price === 0
-              ? 'bg-success/20 text-success'
-              : 'bg-primary/20 text-primary'
+      </div>
+
+      <div className="p-6 flex flex-col flex-grow">
+        <div className="mb-3">
+          <span className={`text-xs font-heading font-bold uppercase tracking-wider ${
+            course.price === 0 ? 'text-success' : 'text-primary'
           }`}>
             {course.price === 0 ? 'Gratis' : `${course.price}€`}
           </span>
         </div>
-      </div>
-
-      <div className="p-6 flex flex-col flex-grow">
         <h2 className="text-xl font-heading font-extrabold mb-3 text-white leading-tight group-hover:text-primary transition-colors">
           {course.title}
         </h2>
@@ -41,13 +39,13 @@ export default function CourseCard({ course }: CourseCardProps) {
         </p>
 
         <div className="pt-4 border-t border-border flex items-center justify-between">
-          <span className="flex items-center gap-1.5 text-[0.6rem] font-bold text-muted-foreground uppercase tracking-widest">
-            <Users className="w-3.5 h-3.5" />
-            {course.enrolled_count ?? 0} Alumnos
+          <span className="flex items-center gap-1.5 text-sm text-muted-foreground">
+            <Users className="w-4 h-4" />
+            {course.enrolled_count ?? 0} alumnos
           </span>
           <Link
             to={`/courses/${course.slug}`}
-            className="border border-border hover:border-primary hover:text-primary px-4 py-1.5 rounded-lg text-xs font-bold transition-all"
+            className="btn-clean !py-2 !px-4 !text-xs"
           >
             Ver curso
           </Link>
