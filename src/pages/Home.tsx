@@ -11,26 +11,13 @@ export default function Home() {
 
   return (
     <div>
-      {/* Hero — dark, brand-forward */}
-      <section className="bg-dark text-white pt-28 pb-16 md:pt-36 md:pb-24">
-        <div className="max-w-5xl mx-auto px-4 lg:px-0">
-          <p className="font-brand text-primary text-sm tracking-wider mb-4">// maqaronesia.com</p>
-          <h1 className="font-heading font-bold text-4xl md:text-6xl leading-[1.1] tracking-tight text-white mb-6">
-            Ingeniería, IA<br className="hidden md:block" /> y Calidad<span className="text-primary">.</span>
-          </h1>
-          <p className="text-lg md:text-xl text-neutral-400 max-w-2xl leading-relaxed mb-8">
-            Artículos sobre automatización, testing, inteligencia artificial y desarrollo profesional en ingeniería de software.
-          </p>
-          <div className="flex gap-4">
-            <Link to="/blog" className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white font-heading font-semibold text-sm px-6 py-3 rounded-lg transition-colors duration-200 cursor-pointer">
-              Leer el blog <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link to="/courses" className="inline-flex items-center gap-2 border border-neutral-600 hover:border-neutral-400 text-neutral-300 hover:text-white font-heading font-semibold text-sm px-6 py-3 rounded-lg transition-colors duration-200 cursor-pointer">
-              Cursos
-            </Link>
-          </div>
+      {/* Masthead — same as Blog/Academy */}
+      <header className="masthead" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?auto=format&fit=crop&w=1920&q=80')" }}>
+        <div className="masthead-content max-w-5xl mx-auto px-4 lg:px-0 text-center">
+          <h1 className="!text-white">maqaronesia.com</h1>
+          <span className="subheading">Ingeniería · IA · Automatización · Calidad</span>
         </div>
-      </section>
+      </header>
 
       {/* Articles section */}
       <section className="max-w-5xl mx-auto px-4 lg:px-0 py-14">
@@ -112,12 +99,12 @@ export default function Home() {
       </section>
 
       {/* CTA section — dark */}
-      <section className="bg-dark text-white py-16">
+      <section className="bg-dark py-16">
         <div className="max-w-5xl mx-auto px-4 lg:px-0 text-center">
-          <h2 className="font-heading font-bold text-2xl md:text-3xl text-white mb-4">
+          <h2 className="font-heading font-bold text-2xl md:text-3xl !text-white mb-4">
             Próximamente: Academia
           </h2>
-          <p className="text-neutral-400 max-w-xl mx-auto mb-8">
+          <p className="!text-white/60 !mt-0 !mb-8 !mx-auto text-center max-w-xl">
             Cursos prácticos sobre automatización, IA aplicada al testing, y cómo construir calidad desde el diseño.
           </p>
           <Link to="/courses" className="inline-flex items-center gap-2 bg-primary hover:bg-primary-hover text-white font-heading font-semibold text-sm px-6 py-3 rounded-lg transition-colors duration-200 cursor-pointer">
