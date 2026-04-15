@@ -2,27 +2,29 @@
 @plugin "@tailwindcss/typography";
 
 @theme {
-  --font-heading: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-body: "Lora", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-heading: "Space Grotesk", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   --font-brand: "Space Mono", "Courier New", monospace;
 
-  --color-primary: #0085A1;
-  --color-primary-hover: #006a81;
+  --color-primary: #F97316;
+  --color-primary-hover: #EA580C;
   --color-primary-foreground: #ffffff;
 
   --color-background: #ffffff;
-  --color-foreground: #212529;
-  --color-surface: #f8f9fa;
-  --color-surface-alt: #e9ecef;
-  --color-border: #dee2e6;
-  --color-muted: #6c757d;
-  --color-muted-foreground: #868e96;
+  --color-foreground: #1a1a1a;
+  --color-surface: #fafafa;
+  --color-surface-alt: #f0f0f0;
+  --color-border: #e5e5e5;
+  --color-muted: #737373;
+  --color-muted-foreground: #a3a3a3;
 
-  --color-success: #198754;
-  --color-error: #dc3545;
-  --color-info: #0d6efd;
+  --color-success: #16a34a;
+  --color-error: #dc2626;
+  --color-info: #2563eb;
 
-  --color-heading: #343a40;
+  --color-heading: #0a0a0a;
+  --color-dark: #171717;
+  --color-dark-secondary: #262626;
 }
 
 /* ── Base ── */
@@ -30,7 +32,7 @@ body {
   font-family: var(--font-body);
   background: var(--color-background);
   color: var(--color-foreground);
-  font-size: 1.125rem;
+  font-size: 1rem;
   line-height: 1.7;
 }
 
@@ -143,17 +145,17 @@ hr {
 }
 .clean-nav.scrolled {
   position: fixed;
-  background-color: rgba(33, 37, 41, 0.95);
-  border-bottom-color: rgba(33, 37, 41, 0.3);
-  backdrop-filter: blur(8px);
+  background-color: rgba(23, 23, 23, 0.97);
+  border-bottom-color: rgba(38, 38, 38, 0.5);
+  backdrop-filter: blur(12px);
 }
 .clean-nav .nav-link {
   font-family: var(--font-heading);
-  font-size: 0.75rem;
-  font-weight: 800;
-  letter-spacing: 0.0625em;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
   transition: color 0.2s;
 }
 .clean-nav .nav-link:hover,
@@ -215,16 +217,17 @@ hr {
 
 /* ── Buttons ── */
 .btn-clean {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
   font-family: var(--font-heading);
   font-size: 0.875rem;
-  font-weight: 800;
-  letter-spacing: 0.0625em;
-  text-transform: uppercase;
+  font-weight: 600;
   padding: 0.75rem 1.5rem;
   border: 1px solid var(--color-primary);
   color: var(--color-primary);
   background: transparent;
+  border-radius: 0.5rem;
   transition: background-color 0.2s, color 0.2s;
   cursor: pointer;
 }
@@ -237,11 +240,18 @@ hr {
 .card-clean {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
 }
 .card-clean:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Brand font utility ── */
+.font-brand {
+  font-family: var(--font-brand);
 }
 
 /* ── Fade in ── */

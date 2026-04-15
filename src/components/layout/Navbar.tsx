@@ -25,7 +25,7 @@ export default function Navbar() {
 
   return (
     <header className={`clean-nav ${scrolled ? 'scrolled' : ''}`}>
-      <div className="max-w-4xl mx-auto flex items-center justify-between h-14 px-4 lg:px-0">
+      <div className="max-w-5xl mx-auto flex items-center justify-between h-14 px-4 lg:px-0">
         {/* Brand */}
         <Link to="/" className="!text-white text-lg tracking-tight" style={{ fontFamily: 'var(--font-brand)', fontWeight: 700 }}>
           maqaronesia.com
