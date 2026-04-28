@@ -1,10 +1,6 @@
 import { useParams } from 'react-router-dom'
-import ReactMarkdown from 'react-markdown'
-import rehypeHighlight from 'rehype-highlight'
-import remarkGfm from 'remark-gfm'
 import { usePost } from '../hooks/usePosts'
 import { formatDate } from '../lib/utils'
-import 'highlight.js/styles/github.css'
 
 export default function PostDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -66,11 +62,10 @@ export default function PostDetail() {
 
       {/* Content */}
       <article className="max-w-4xl mx-auto px-4 lg:px-0 py-12">
-        <div className="prose prose-lg max-w-none">
-          <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
-            {post.content}
-          </ReactMarkdown>
-        </div>
+        <div
+            className="prose prose-lg max-w-none"
+            dangerouslySetInnerHTML={{ __html: post.content }}
+          />
 
         {/* Tags */}
         {post.tags && post.tags.length > 0 && (
