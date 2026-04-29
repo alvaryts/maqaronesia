@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate, Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
+import { resolvePostImage } from '../lib/postImages'
 import { Save, ArrowLeft, Eye } from 'lucide-react'
 import type { Category, Tag } from '../types/database'
 
@@ -155,7 +156,7 @@ export default function AdminPostEditor() {
 
   return (
     <div>
-      <header className="masthead" style={{ backgroundImage: imageUrl ? `url('${imageUrl}')` : "url('https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1920&q=80')" }}>
+      <header className="masthead" style={{ backgroundImage: `url('${resolvePostImage(slug, imageUrl || null)}')` }}>
         <div className="masthead-content max-w-4xl mx-auto px-4 lg:px-0 text-center">
           <h1>{isNew ? 'Nuevo Artículo' : 'Editar Artículo'}</h1>
         </div>

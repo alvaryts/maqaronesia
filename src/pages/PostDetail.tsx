@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom'
 import { usePost } from '../hooks/usePosts'
 import { formatDate } from '../lib/utils'
+import { resolvePostImage } from '../lib/postImages'
 
 export default function PostDetail() {
   const { slug } = useParams<{ slug: string }>()
@@ -35,15 +36,15 @@ export default function PostDetail() {
     )
   }
 
+  const postImage = resolvePostImage(post.slug, post.image_url)
+
   return (
     <div>
       {/* Post Masthead */}
       <header
         className="masthead"
         style={{
-          backgroundImage: post.image_url
-            ? `url('${post.image_url}')`
-            : "url('https://images.unsplash.com/photo-1510915228340-29c85a43dcfe?auto=format&fit=crop&w=1920&q=80')"
+          backgroundImage: `url('${postImage}')`
         }}
       >
         <div className="masthead-content max-w-4xl mx-auto px-4 lg:px-0">

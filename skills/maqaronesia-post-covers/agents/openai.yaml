@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maqaronesia Post Covers"
+  short_description: "Generate cohesive AI cover art for this blog series."
+  default_prompt: "Generate or refresh the Maqaronesia blog cover series using the published posts, the shared editorial style, and the local slug-to-image mapping."

@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom'
 import { usePosts } from '../hooks/usePosts'
 import { formatDate } from '../lib/utils'
+import { resolvePostImage } from '../lib/postImages'
 import { ArrowRight } from 'lucide-react'
 
 export default function Home() {
@@ -47,7 +48,7 @@ export default function Home() {
                 <Link to={`/blog/${latest.slug}`} className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center cursor-pointer">
                   <div className="overflow-hidden rounded-xl">
                     <img
-                      src={latest.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80'}
+                      src={resolvePostImage(latest.slug, latest.image_url)}
                       alt={latest.title}
                       className="w-full aspect-[16/10] object-cover group-hover:scale-[1.02] transition-transform duration-500"
                     />
@@ -78,7 +79,7 @@ export default function Home() {
                   <Link to={`/blog/${post.slug}`} className="block cursor-pointer">
                     <div className="overflow-hidden rounded-xl mb-3">
                       <img
-                        src={post.image_url || 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=800&q=80'}
+                        src={resolvePostImage(post.slug, post.image_url)}
                         alt={post.title}
                         className="w-full aspect-[16/10] object-cover group-hover:scale-[1.02] transition-transform duration-500"
                       />
